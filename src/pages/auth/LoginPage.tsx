@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../stores/authStore';
+import '@radix-ui/themes/styles.css';
+import { Card, Flex, Text, TextField, Button, Heading } from '@radix-ui/themes';
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -23,25 +25,34 @@ const LoginPage: React.FC = () => {
     };
 
     if (isAuthenticated) {
-        return <p>You are already logged in. Redirecting...</p>; // Or navigate('/protected');
+        return <Text>You are already logged in. Redirecting...</Text>;
     }
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username:</label>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
-        </div>
+        <Flex align="center" justify="center" style={{ height: '100vh' }}>
+            <Card size="3" style={{ minWidth: 350 }}>
+                <form onSubmit={handleSubmit}>
+                    <Flex direction="column" gap="3">
+                        <Heading size="4" align="center">Login</Heading>
+                        <TextField.Root 
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required>
+                        </TextField.Root>
+                        <TextField.Root
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <Button type="submit" size="3" color="blue">Login</Button>
+                        {loginError && <Text color="red">{loginError}</Text>}
+                    </Flex>
+                </form>
+            </Card>
+        </Flex>
     );
 };
 

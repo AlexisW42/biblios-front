@@ -13,7 +13,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
     return (
         <div>
-            <header style={{ borderBottom: '1px solid #ccc', padding: '10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* <header style={{ borderBottom: '1px solid #ccc', padding: '10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h1>My App</h1>
                 <nav>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', gap: '15px' }}>
@@ -27,7 +27,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             </header>
             <main style={{ padding: '20px' }}>
                 {children}
-            </main>
+            </main> */}
             {/* Opcional: Footer */}
             {/* <footer><p>&copy; 2025 My App</p></footer> */}
         </div>
