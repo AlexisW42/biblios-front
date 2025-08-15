@@ -1,32 +1,37 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
+import { BrowserRouter as Router, Routes, Route, useParams, Link } from 'react-router-dom';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
-import ProtectedPage from '../pages/ProtectedPage';
-import PrivateRoute from './PrivateRoute';
-import MainLayout from '../layouts/MainLayout'; // Si tienes un layout
-// import NotFoundPage from '../pages/NotFoundPage'; // Una página para 404
+import AuthLayout from '../layouts/AuthLayout'; // Importa el nuevo layout
+import Layout from '../layouts/Layout';
+import CreateBookForm from '../pages/book/CreateBook';
+import IndexBook from '../pages/book/IndexBook';
+import IndexUser from '../pages/user/IndexUser.tsx';
+// import IndexLoan from '../pages/loan/IndexLoan.tsx';
+import IndexBookCopies from '../pages/bookCopies/IndexBookCopies.tsx';
 
 const AppRouter: React.FC = () => {
     return (
         <Router>
-            <MainLayout>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
+            <Routes>
+                {/* Rutas con AuthLayout */}
+                <Route element={<AuthLayout />}>
+                    <Route path="/" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />
-                    <Route
-                        path="/protected"
-                        element={
-                            <PrivateRoute>
-                                <ProtectedPage />
-                            </PrivateRoute>
-                        }
-                    />
-                    {/* <Route path="*" element={<NotFoundPage />} /> Ruta para 404 */}
-                </Routes>
-            </MainLayout>
+                </Route>
+
+                <Route element={<Layout />}>
+                    <Route path="/create-book" element={<CreateBookForm />} />
+                    <Route path="/books" element={<IndexBook />} />
+                    <Route path="/users" element={<IndexUser />} />
+                    {/* <Route path="/loans" element={<IndexLoan />} /> */}
+                    <Route path="/books/:bookId/copies" element={<IndexBookCopies />} />
+
+                </Route>
+
+                {/* <Route path="*" element={<NotFoundPage />} /> */}
+            </Routes>
         </Router>
     );
 };

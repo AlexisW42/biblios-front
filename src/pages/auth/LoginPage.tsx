@@ -18,14 +18,14 @@ const LoginPage: React.FC = () => {
         setLoginError('');
         const success = await login(username, password);
         if (success) {
-            navigate('/protected');
+            navigate('/books');
         } else {
             setLoginError('Login failed. Invalid credentials.');
         }
     };
 
     if (isAuthenticated) {
-        return <Text>You are already logged in. Redirecting...</Text>;
+        return <Text>Ya has iniciado sesión...</Text>;
     }
 
     return (
@@ -33,21 +33,21 @@ const LoginPage: React.FC = () => {
             <Card size="3" style={{ minWidth: 350 }}>
                 <form onSubmit={handleSubmit}>
                     <Flex direction="column" gap="3">
-                        <Heading size="4" align="center">Login</Heading>
+                        <Heading size="4" align="center">Ingresar a Biblios</Heading>
                         <TextField.Root 
-                            placeholder="Username"
+                            placeholder="Nombre de usuario"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required>
                         </TextField.Root>
                         <TextField.Root
                             type="password"
-                            placeholder="Password"
+                            placeholder="Contraseña"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <Button type="submit" size="3" color="blue">Login</Button>
+                        <Button type="submit" size="3" color="blue">Ingresar</Button>
                         {loginError && <Text color="red">{loginError}</Text>}
                     </Flex>
                 </form>
