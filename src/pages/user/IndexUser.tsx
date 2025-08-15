@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { User } from '../../types/auth';
 import useAuthStore from '../../stores/authStore';
 import { Eye, Edit, ChevronLeft, ChevronRight, XCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Importa los modales correctos
 import ViewUserModal from './ViewUserModal';
@@ -38,6 +39,7 @@ const IndexUser: React.FC = () => {
     const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
     const axiosPrivate = useAuthStore((state) => state.axiosPrivate);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -135,14 +137,14 @@ const IndexUser: React.FC = () => {
                     placeholder="Buscar por nombre, email o rol..."
                     value={search}
                     onChange={handleSearchChange}
-                    className="w-full md:w-1/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    className="w-full md:w-1/3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-sm p-0 h-8"
                 />
 
                 {/* Filtro por Rol */}
                 <select
                     value={role}
                     onChange={handleRoleChange}
-                    className="w-full md:w-1/4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    className="w-full md:w-1/4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-sm p-0 h-8"
                 >
                     <option value="">Todos los Roles</option>
                     <option value="user">Usuario</option>
@@ -153,7 +155,7 @@ const IndexUser: React.FC = () => {
                 <select
                     value={`${sortBy}-${order}`}
                     onChange={handleSortChange}
-                    className="w-full md:w-1/4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    className="w-full md:w-1/4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-sm p-0 h-8"
                 >
                     <option value="user_id-ASC">Ordenar por ID (asc.)</option>
                     <option value="user_id-DESC">Ordenar por ID (desc.)</option>
@@ -231,6 +233,13 @@ const IndexUser: React.FC = () => {
                                                 aria-label={`Editar usuario ${user.user_id}`}
                                             >
                                                 <Edit className="h-5 w-5" />
+                                            </button>
+                                            <button
+                                                onClick={() => navigate(`/usuarios/${user.user_id}/historial`)}
+                                                className="text-blue-600 hover:text-blue-900"
+                                                aria-label={`Ver historial de préstamos de ${user.user_id}`}
+                                            >
+                                                Historial
                                             </button>
                                         </div>
                                     </td>

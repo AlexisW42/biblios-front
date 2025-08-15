@@ -202,7 +202,7 @@ const IndexBook: React.FC = () => {
                     <select
                         value={majorId}
                         onChange={(e) => setMajorId(e.target.value)}
-                        className="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                        className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-sm p-0 h-8"
                     >
                         <option value="">Todas las Carreras</option>
                         {majors.map((major) => (

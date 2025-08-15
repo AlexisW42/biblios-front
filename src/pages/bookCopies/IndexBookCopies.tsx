@@ -3,18 +3,21 @@ import { Eye, Edit } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import type { BookCopy, Book } from '../../types';
 import useAuthStore from '../../stores/authStore';
+import CreateLoanModal from '../loan/CreateLoanModal'; // Importa el modal
 
 
-// Define los props que el componente recibirá
 interface IndexBookCopiesProps {
     bookId: string;
 }
 
 const IndexBookCopies: React.FC = () => {
-  const { bookId } = useParams();
+    const { bookId } = useParams();
     const [copies, setCopies] = useState<BookCopy[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [showLoanModal, setShowLoanModal] = useState(false);
+    const [selectedCopyId, setSelectedCopyId] = useState<number | null>(null);
+    const [book, setBook] = useState<Book | null>(null);
 
     const axiosPrivate = useAuthStore((state) => state.axiosPrivate);
 
@@ -26,10 +29,8 @@ const IndexBookCopies: React.FC = () => {
         const fetchBookCopies = async () => {
             setLoading(true);
             try {
-                // Llama al endpoint de tu API con el bookId
                 const response = await axiosPrivate.get<BookCopy[]>(`/books/${bookId}/copies`);
                 setCopies(response.data);
-                console.log('Copias del libro:', response.data);
                 setError(null);
             } catch (err) {
                 console.error('Error fetching book copies:', err);
@@ -45,8 +46,18 @@ const IndexBookCopies: React.FC = () => {
             }
         };
 
+        const fetchBook = async () => {
+            try {
+                const response = await axiosPrivate.get<Book>(`/books/${bookId}`);
+                setBook(response.data);
+            } catch (err) {
+                setBook(null);
+            }
+        };
+
         if (bookId) {
             fetchBookCopies();
+            fetchBook();
         }
     }, [bookId, refreshTrigger]);
 
@@ -66,7 +77,7 @@ const IndexBookCopies: React.FC = () => {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-                Copias del Libro con ID: {bookId}
+                Copias de{book ? `: ${book.title}` : ''}
             </h1>
             
             {/* Contenedor de la tabla */}
@@ -141,6 +152,17 @@ const IndexBookCopies: React.FC = () => {
                                             >
                                                 <Edit className="h-5 w-5" />
                                             </button>
+                                            <button
+                                                className="text-blue-600 hover:text-blue-900"
+                                                aria-label={`Prestar copia ${copy.copy_id}`}
+                                                onClick={() => {
+                                                  setSelectedCopyId(copy.copy_id);
+                                                  setShowLoanModal(true);
+                                                }}
+                                                disabled={copy.status !== 'available'}
+                                            >
+                                                Prestar
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -153,6 +175,12 @@ const IndexBookCopies: React.FC = () => {
                     </p>
                 )}
             </div>
+            <CreateLoanModal
+                isOpen={showLoanModal}
+                onClose={() => setShowLoanModal(false)}
+                onUpdate={handleRefresh}
+                copyId={selectedCopyId}
+            />
         </div>
     );
 };

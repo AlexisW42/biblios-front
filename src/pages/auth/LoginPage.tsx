@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
         setLoginError('');
         const success = await login(username, password);
         if (success) {
-            navigate('/books');
+            navigate('/dashboard');
         } else {
             setLoginError('Login failed. Invalid credentials.');
         }

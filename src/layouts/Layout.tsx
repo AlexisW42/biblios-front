@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
 
       {/* Links de navegación */}
       <Flex direction="column" gap="2" flexGrow="1">
-        <NavLink to="/" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose} end>
+        <NavLink to="/dashboard" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose} end>
           <Flex align="center" gap="2">
             <DashboardIcon />
             <Text>Escritorio</Text>
@@ -61,12 +61,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
             <Text>Usuarios</Text>
           </Flex>
         </NavLink>
-        <NavLink to="/roles" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
+        {/* <NavLink to="/roles" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
           <Flex align="center" gap="2">
             <LockClosedIcon />
             <Text>Roles</Text>
           </Flex>
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/books" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
           <Flex align="center" gap="2">
             <ReaderIcon />
