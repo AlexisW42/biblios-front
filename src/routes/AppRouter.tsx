@@ -11,6 +11,9 @@ import IndexBookCopies from '../pages/bookCopies/IndexBookCopies.tsx';
 import UserLoanHistory from '../pages/user/UserLoanHistory';
 import IndexLoan from '../pages/loan/IndexLoan.tsx';
 import IndexDashboard from '../pages/dashboard/IndexDashboard.tsx';
+import IndexBackup from '../pages/backup/IndexBackup.tsx';
+import IndexLocation from '../pages/location/IndexLocation.tsx';
+import IndexMajors from '../pages/major/IndexMajor.tsx';
 
 
 const AppRouter: React.FC = () => {
@@ -33,6 +36,9 @@ const AppRouter: React.FC = () => {
                     <Route path="/usuarios/:id/historial" element={<UserLoanHistory />} />
                     <Route path="/loans" element={<IndexLoan />}/>
                     <Route path="/dashboard" element={<IndexDashboard />} />
+                    <Route path="/backup" element={<IndexBackup />} /> 
+                    <Route path="/locations" element={<IndexLocation />} />
+                    <Route path="/majors" element={<IndexMajors />} />
                 </Route>
 
                 {/* <Route path="*" element={<NotFoundPage />} /> */}

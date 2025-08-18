@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import type { User } from '../../types/auth';
 import useAuthStore from '../../stores/authStore';
-import { Eye, Edit, ChevronLeft, ChevronRight, XCircle } from 'lucide-react';
+import { Eye, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 // Importa los modales correctos
 import ViewUserModal from './ViewUserModal';
 import EditUserModal from './EditUserModal';
+import CreateUserModal from './CreateUserModal';
 
 // Define la estructura de la respuesta de la API con paginación
 interface PaginatedResponse {
@@ -33,6 +34,8 @@ const IndexUser: React.FC = () => {
     // Estados para el manejo de modales
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     
     // Nuevo estado para forzar la recarga
@@ -105,6 +108,19 @@ const IndexUser: React.FC = () => {
         setSelectedUser(null);
     };
 
+    const handleOpenCreateModal = () => {
+        setIsCreateModalOpen(true);
+    };
+
+    const handleCloseCreateModal = () => {
+        setIsCreateModalOpen(false);
+    };
+
+    const handleUserCreated = () => {
+        setRefreshTrigger(prev => prev + 1); // Triggers a re-fetch of the user list
+        handleCloseCreateModal();
+    };
+
     // Función para manejar la actualización y recarga
     const handleUpdateUser = () => {
         setRefreshTrigger(prev => prev + 1); // Incrementa el contador para forzar el useEffect
@@ -164,6 +180,15 @@ const IndexUser: React.FC = () => {
                     <option value="email-ASC">Ordenar por Email (asc.)</option>
                     <option value="email-DESC">Ordenar por Email (desc.)</option>
                 </select>
+
+                <div className="flex justify-end">
+                    <button
+                        onClick={handleOpenCreateModal}
+                        className="text-white font-bold py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-sm hover:from-blue-600 hover:to-indigo-700"
+                    >
+                        Crear Nuevo Usuario
+                    </button>
+                </div>
             </div>
 
             {/* Tabla de Usuarios */}
@@ -284,6 +309,12 @@ const IndexUser: React.FC = () => {
                 user={selectedUser} 
                 onClose={handleCloseEditModal} // Ahora se usa la función de cierre específica
                 onUpdate={handleUpdateUser} // `onUpdate` sigue llamando a `handleUpdateUser`
+            />
+
+            <CreateUserModal
+                isOpen={isCreateModalOpen}
+                onClose={handleCloseCreateModal}
+                onUserCreated={handleUserCreated}
             />
         </div>
     );

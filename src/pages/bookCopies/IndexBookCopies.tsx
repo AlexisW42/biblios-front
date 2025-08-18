@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, Edit } from 'lucide-react';
+import { Eye, Edit, PlusCircle } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import type { BookCopy, Book } from '../../types';
 import useAuthStore from '../../stores/authStore';
 import CreateLoanModal from '../loan/CreateLoanModal'; // Importa el modal
+import CreateBookCopyModal from './CreateBookCopyModal'; // Importar el nuevo modal
+import { Button } from '@radix-ui/themes';
 
 
 interface IndexBookCopiesProps {
@@ -16,6 +18,7 @@ const IndexBookCopies: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [showLoanModal, setShowLoanModal] = useState(false);
+    const [isCreateCopyModalOpen, setIsCreateCopyModalOpen] = useState(false);
     const [selectedCopyId, setSelectedCopyId] = useState<number | null>(null);
     const [book, setBook] = useState<Book | null>(null);
 
@@ -76,9 +79,15 @@ const IndexBookCopies: React.FC = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-                Copias de{book ? `: ${book.title}` : ''}
-            </h1>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold text-gray-800">
+                    Copias de{book ? `: ${book.title}` : ''}
+                </h1>
+                <Button onClick={() => setIsCreateCopyModalOpen(true)}>
+                    <PlusCircle className="h-5 w-5" />
+                    Añadir Copia
+                </Button>
+            </div>
             
             {/* Contenedor de la tabla */}
             <div className="bg-white rounded-lg shadow-md overflow-x-auto">
@@ -139,7 +148,6 @@ const IndexBookCopies: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div className="flex items-center space-x-2">
-                                            {/* Botones de acción, puedes agregar lógica para modales aquí */}
                                             <button
                                                 className="text-indigo-600 hover:text-indigo-900"
                                                 aria-label={`Ver copia ${copy.copy_id}`}
@@ -152,17 +160,18 @@ const IndexBookCopies: React.FC = () => {
                                             >
                                                 <Edit className="h-5 w-5" />
                                             </button>
-                                            <button
-                                                className="text-blue-600 hover:text-blue-900"
-                                                aria-label={`Prestar copia ${copy.copy_id}`}
-                                                onClick={() => {
-                                                  setSelectedCopyId(copy.copy_id);
-                                                  setShowLoanModal(true);
-                                                }}
-                                                disabled={copy.status !== 'available'}
-                                            >
-                                                Prestar
-                                            </button>
+                                            {copy.status === 'available' && (
+                                                <button
+                                                    className="text-blue-600 hover:text-blue-900"
+                                                    aria-label={`Prestar copia ${copy.copy_id}`}
+                                                    onClick={() => {
+                                                      setSelectedCopyId(copy.copy_id);
+                                                      setShowLoanModal(true);
+                                                    }}
+                                                >
+                                                    Prestar
+                                                </button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
@@ -180,6 +189,12 @@ const IndexBookCopies: React.FC = () => {
                 onClose={() => setShowLoanModal(false)}
                 onUpdate={handleRefresh}
                 copyId={selectedCopyId}
+            />
+            <CreateBookCopyModal
+                isOpen={isCreateCopyModalOpen}
+                onClose={() => setIsCreateCopyModalOpen(false)}
+                onUpdate={handleRefresh}
+                bookId={bookId}
             />
         </div>
     );

@@ -8,11 +8,19 @@ import { API_BASE_URL } from '../../utils/constants'; // Assuming this constant 
 import useAuthStore from '../../stores/authStore';
 import { Button } from '@radix-ui/themes';
 
+// Define la estructura de la respuesta de la API con paginación para ubicaciones
+interface PaginatedLocationsResponse {
+    data: Location[];
+    total: number;
+    page: number;
+    limit: number;
+}
+
 interface Location {
   location_id: number | string;
   branch_name: string;
   floor?: string;
-  shelf: string;
+  shelf?: string;
 }
 
 interface CreateBookModalProps {
@@ -47,9 +55,10 @@ const CreateBookModal: React.FC<CreateBookModalProps> = ({ isOpen, onClose, onUp
             const fetchInitialData = async () => {
                 setIsLoading(true);
                 try {
-                    const locationsResponse = await axiosPrivate.get<Location[]>(`${API_BASE_URL}/locations`);
-                    setLocations(locationsResponse.data);
-                    
+                    // Cuidado aquí: la API de ubicaciones devuelve un objeto con un campo 'data'
+                    const locationsResponse = await axiosPrivate.get<PaginatedLocationsResponse>(`${API_BASE_URL}/locations?limit=1000`); // Aumentamos el límite para obtener todas las ubicaciones
+                    setLocations(locationsResponse.data.data); // Accede a la propiedad 'data'
+
                     const majorsResponse = await axiosPrivate.get<{ majorId: number; name: string }[]>(`${API_BASE_URL}/majors`);
                     setMajors(majorsResponse.data);
 

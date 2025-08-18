@@ -35,7 +35,6 @@ export interface UserState {
   logout: () => void;
 }
 
-// Para las ubicaciones, si las necesitas tipadas
 export interface Location {
   location_id: number;
   branch_name: string;

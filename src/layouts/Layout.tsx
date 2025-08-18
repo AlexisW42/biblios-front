@@ -4,7 +4,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { Box, Flex, Button, Text, Avatar, Separator } from '@radix-ui/themes';
 import * as Dialog from '@radix-ui/react-dialog'; // Keep this if Dialog is used elsewhere
 import { useNavigate } from 'react-router-dom';
-import { HamburgerMenuIcon, Cross1Icon, DashboardIcon, PersonIcon, LockClosedIcon, ReaderIcon, FileTextIcon, GlobeIcon, ExitIcon, ExternalLinkIcon } from '@radix-ui/react-icons';
+import { HamburgerMenuIcon, Cross1Icon, DashboardIcon, PersonIcon, DownloadIcon, ReaderIcon, ExitIcon, ExternalLinkIcon, DrawingPinIcon } from '@radix-ui/react-icons';
 import authStore  from '../stores/authStore';
 
 interface SidebarProps {
@@ -61,12 +61,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
             <Text>Usuarios</Text>
           </Flex>
         </NavLink>
-        {/* <NavLink to="/roles" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
-          <Flex align="center" gap="2">
-            <LockClosedIcon />
-            <Text>Roles</Text>
-          </Flex>
-        </NavLink> */}
         <NavLink to="/books" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
           <Flex align="center" gap="2">
             <ReaderIcon />
@@ -79,15 +73,23 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
             <Text>Préstamos</Text>
           </Flex>
         </NavLink>
+        <NavLink to="/locations" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
+          <Flex align="center" gap="2">
+            <DrawingPinIcon />
+            <Text>Ubicaciones</Text>
+          </Flex>
+        </NavLink>
+        <NavLink to="/backups" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
+          <Flex align="center" gap="2">
+            <DownloadIcon />
+            <Text>Copias de seguridad</Text>
+          </Flex>
+        </NavLink>
       </Flex>
 
       {/* Links inferiores */}
       <Flex direction="column" gap="2" mt="auto">
         <Separator size="4" my="3" />
-        {/* <NavLink to="/intranet" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onClose}>
-          <GlobeIcon />
-          <Text>Intranet</Text>
-        </NavLink> */}
         <Button variant="ghost" color="gray" onClick={handleLogout}>
           <ExitIcon />
           <Text>Cerrar sesión</Text>
@@ -100,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
 const Header: React.FC<{ onMenuButtonClick: () => void; }> = ({ onMenuButtonClick }) => {
   return (
     <Flex
-      as="div" // Changed from "header" to "div" to resolve type issue with Radix UI Flex component
+      as="div"
       align="center"
       justify="between"
       p="3"
@@ -117,7 +119,7 @@ const Header: React.FC<{ onMenuButtonClick: () => void; }> = ({ onMenuButtonClic
         </Button>
       </Box>
       <Text size="5" weight="bold">Biblios</Text>
-      <Box>{/* Puedes añadir otros elementos aquí, como un avatar de usuario o notificaciones */}</Box>
+      <Box>{/* Para añadir otros elementos aquí */}</Box>
     </Flex>
   );
 };
@@ -128,11 +130,9 @@ const Layout: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Usamos los breakpoints de Radix UI: 'md' es 768px
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Establece el estado inicial
     handleResize();
 
     window.addEventListener('resize', handleResize);
@@ -144,11 +144,10 @@ const Layout: React.FC = () => {
       <Header onMenuButtonClick={() => setIsSidebarOpen(true)} />
 
       <Flex flexGrow="1">
-        {/* Sidebar para pantallas de escritorio (oculto en móvil) */}
         <Box
           width="250px"
           flexShrink="0"
-          display={{ initial: 'none', md: 'block' }} // Oculta en 'initial' (móvil), muestra en 'md' (escritorio)
+          display={{ initial: 'none', md: 'block' }}
           style={{
             borderRight: '1px solid var(--gray-a4)',
             backgroundColor: 'var(--color-background)',
@@ -158,7 +157,6 @@ const Layout: React.FC = () => {
           <Sidebar />
         </Box>
 
-        {/* Sidebar para móvil (usando Radix Dialog como overlay) */}
         {isMobile && (
           <Dialog.Root open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <Dialog.Portal>
@@ -177,8 +175,8 @@ const Layout: React.FC = () => {
           justify="center" // Centra horizontalmente el contenido
           style={{ overflowY: 'auto', backgroundColor: 'var(--gray-1)' }}
         >
-          <Box style={{ width: '100%', maxWidth: '1200px' }}> {/* O ajusta el maxWidth según tus necesidades */}
-            <Outlet /> {/* Aquí se renderiza el componente de la ruta actual */}
+          <Box style={{ width: '100%', maxWidth: '1200px' }}>
+            <Outlet /> {/* renderizado del componente de la ruta actual */}
           </Box>
         </Flex>
       </Flex>
